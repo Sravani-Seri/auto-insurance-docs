@@ -1,5 +1,3 @@
-# auto-insurance-docs
-Technical writing sample - auto insurance platform
 # Technical Writing Sample: Insurance Domain Documentation
 
 ## 1. Introduction
@@ -11,7 +9,7 @@ This document demonstrates structured technical writing across four common insur
 
 - Policy Documentation  
 - Underwriting Guidelines  
-- Technical Claims Report  
+- Rating Engine (premium calculation) 
 - API Documentation for an InsurTech Platform  
 
 ---
@@ -69,28 +67,40 @@ def underwrite_policy(customer):
 ```
 **Explanation of Rules:**
 
-Rule	Logic
-Criminal History	Reject if customer has serious criminal history
-Age	Reject if driver is under 18
-Vehicle Year	Reject if vehicle is older than 2000
+| Rule	           | Logic                                          |
+| ---------------  | ---------------------------------------------- |
+| Criminal History | Reject if customer has serious criminal history|
+| Age              | Reject if driver is under 18                   |
+| Vehicle Year     | Reject if vehicle is older than 2000           |
 
-This ensures consistent decisions and can scale to more rules.
+This rule-based approach ensures consistent, scalable, and auditable decisions.
 
 ## 4. Rating Engine
 
-Calculates insurance premiums based on customer details and coverage type.
+The rating engine calculates insurance premiums dynamically based on customer and vehicle attributes.
 
 ```python
 def calculate_premium(customer):
-    base_premium = 500  # base rate in USD
+    """
+    Calculates annual premium based on risk factors.
+    Returns: premium amount rounded to 2 decimal places (USD)
+    """
+    base_premium = 500.0  # base rate in USD
+
+    # Age-based surcharge
     if customer['age'] < 25:
         base_premium *= 1.5
     elif customer['age'] > 60:
         base_premium *= 1.2
-    if customer['vehicle_type'] == 'Sports':
-        base_premium *= 2
+
+    # Vehicle type surcharge
+    if customer.get('vehicle_type') == 'Sports':
+        base_premium *= 2.0
+
+    # Coverage type surcharge
     if customer['coverage_type'] == 'Comprehensive':
         base_premium *= 1.3
+
     return round(base_premium, 2)
 ```
 **Premium Factors Explained:**
@@ -106,10 +116,10 @@ def calculate_premium(customer):
 
 Modern insurance platforms expose APIs to allow integration with apps or partners.
 
-## 5.1 Create Policy
+### 5.1 Create Policy
 
-Endpoint: POST /api/policies
-Description: Creates a new insurance policy
+**Endpoint:** POST /api/policies  
+**Description:** Creates a new insurance policy
 
 Request Example:
 
@@ -128,16 +138,16 @@ Response Example:
 {
     "policy_number": "POL123456",
     "status": "Active",
-    "premium": 845
+    "premium": 845.00
 }
 ```
 
 **Explanation:** Returns a unique policy number and calculated premium.
 
-## 5.2 Check Policy Status
+### 5.2 Check Policy Status
 
-Endpoint: GET /api/policies/{policy_number}
-Description: Retrieves current status and details of an existing policy
+**Endpoint:** GET /api/policies/{policy_number}  
+**Description:** Retrieves current status and details of an existing policy
 
 Response Example:
 
@@ -154,10 +164,10 @@ Response Example:
 
 **Explanation:** Helps track policy status and returns comprehensive policy details.
 
-## 5.3 Cancel Policy
+### 5.3 Cancel Policy
 
-Endpoint: POST /api/policies/{policy_number}/cancel
-Description: Cancels an active insurance policy
+**Endpoint:** POST /api/policies/{policy_number}/cancel  
+**Description:** Cancels an active insurance policy
 
 Response Example:
 
@@ -169,16 +179,16 @@ Response Example:
 }
 ```
 
-**Explanation:** Cancels policy, updates status, and returns refund if applicable.
+**Explanation:** Cancels policy, updates status, and returns any applicable refund.
 
 ## 6. Summary for Non-Technical Readers
 
 This technical documentation demonstrates:
 
-Policy Documentation: How insurance contracts are structured in software
+**Policy Documentation:** How insurance contracts are structured in software
 
-Underwriting Rules: How applications are approved or rejected
+**Underwriting Rules:** How applications are approved or rejected
 
-Rating Engine: How premiums are dynamically calculated based on risk
+**Rating Engine:** How premiums are dynamically calculated based on risk
 
-API Documentation: How external systems or applications interact with the platform
+**API Documentation:** How external systems or applications interact with the platform
