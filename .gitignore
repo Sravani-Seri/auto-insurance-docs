@@ -1,0 +1,10 @@
+# Doxygen generated output
+docs/
+html/
+latex/
+
+# macOS files
+.DS_Store
+
+# VS Code settings
+.vscode/
